@@ -1,0 +1,13 @@
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-2xl font-bold mb-4">Practitioner Information</h1>
+
+  <div class="space-y-4">
+    <p><strong>Name:</strong> <%= @practitioner.first_name + ' ' + @practitioner.last_name %></p>
+    <p><strong>Phone number:</strong> <%= simple_format(@practitioner.phone_number) %></p>
+    <p><strong>Date of Birth:</strong> <%= @practitioner.date_of_birth %></p>
+    <p><strong>AHPRA Registration Number:</strong> <%= @practitioner.ahpra_number %></p>
+    <%= link_to 'Provider Numbers', provider_numbers_path, class: 'mt-4 inline-block px-4 py-2 font-bold text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50' %>
+  </div>
+
+  <%= link_to 'Edit Information', edit_practitioner_path, class: 'mt-4 inline-block px-4 py-2 font-bold text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50' %>
+</div>

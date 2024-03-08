@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  health_fund: MyString
+  provider_number: MyString
+  practitioner: one
+
+two:
+  health_fund: MyString
+  provider_number: MyString
+  practitioner: two

@@ -1,0 +1,25 @@
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-2xl font-bold mb-4">Provider Numbers</h1>
+  <%= link_to 'Add Provider Number', new_provider_number_path, class: 'px-4 py-2 font-bold text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50' %>
+  <table class="mt-4 w-full">
+    <thead>
+      <tr>
+        <th class="px-4 py-2">Health Fund</th>
+        <th class="px-4 py-2">Provider Number</th>
+        <th class="px-4 py-2">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @provider_numbers.each do |provider_number| %>
+        <tr>
+          <td class="px-4 py-2"><%= provider_number.health_fund.name %></td>
+          <td class="px-4 py-2"><%= provider_number.provider_number %></td>
+          <td class="px-4 py-2">
+            <%= link_to 'Edit', edit_provider_number_path(provider_number), class: 'text-blue-500 hover:text-blue-600 focus:outline-none focus:underline' %>
+            <%= button_to 'Delete', provider_number_path(provider_number), method: :delete, data: { confirm: 'Are you sure?' }, class: 'text-red-500 hover:text-red-600 focus:outline-none focus:underline' %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

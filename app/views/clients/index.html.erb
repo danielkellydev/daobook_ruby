@@ -1,0 +1,28 @@
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-2xl font-bold mb-4">Clients</h1>
+
+  <%= link_to 'New Client', new_client_path, class: 'px-4 py-2 font-bold text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50' %>
+
+  <table class="mt-4 w-full">
+    <thead>
+      <tr>
+        <th class="px-4 py-2">First Name</th>
+        <th class="px-4 py-2">Last Name</th>
+        <th class="px-4 py-2">Email</th>
+        <th class="px-4 py-2">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @clients.each do |client| %>
+        <tr>
+          <td class="px-4 py-2"><%= client.first_name %></td>
+          <td class="px-4 py-2"><%= client.last_name %></td>
+          <td class="px-4 py-2"><%= client.email %></td>
+          <td class="px-4 py-2">
+            <%= link_to 'Edit', edit_client_path(client), class: 'text-blue-500 hover:underline' %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

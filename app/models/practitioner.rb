@@ -3,4 +3,7 @@ class Practitioner < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+
+  has_many :clients
+  has_many :provider_numbers, dependent: :destroy
 end
