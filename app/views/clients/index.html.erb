@@ -19,6 +19,7 @@
           <td class="px-4 py-2"><%= client.last_name %></td>
           <td class="px-4 py-2"><%= client.email %></td>
           <td class="px-4 py-2">
+            <%= link_to 'Consults', client_consultations_path(client), class: 'text-blue-500 hover:underline' %>
             <%= link_to 'Edit', edit_client_path(client), class: 'text-blue-500 hover:underline' %>
           </td>
         </tr>
