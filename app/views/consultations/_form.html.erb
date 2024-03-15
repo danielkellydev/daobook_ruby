@@ -1,8 +1,18 @@
-<%= form_with(model: [@client, @consultation], local: true, class: 'space-y-4') do |form| %>
+<%= form_with(model: [@client, @consultation], local: true, class: 'space-y-4', data: { controller: 'consultation-type', consultation_type_url_value: consultation_fields_consultations_path }) do |form| %>
   <div>
-    <%= form.label :notes, class: 'block font-bold' %>
-    <%= form.text_area :notes, class: 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50', rows: 10 %>
+    <%= form.label :consultation_type, class: 'block font-bold' %>
+    <%= form.select :consultation_type, options_for_select(['Initial', 'Return'], @consultation.consultation_type), {}, { class: 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50', data: { action: 'change->consultation-type#loadFields' } } %>
   </div>
 
-  <%= form.submit class: 'px-4 py-2 font-bold text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50' %>
+  <%= tag.div id: 'consultation_fields' do %>
+    <% if @consultation.consultation_type == 'Initial' || @consultation.consultation_type.nil? %>
+      <%= render 'initial_consultation_fields', form: form %>
+    <% elsif @consultation.consultation_type == 'Return' %>
+      <%= render 'return_consultation_fields', form: form %>
+    <% end %>
+  <% end %>
+
+  <div>
+    <%= form.submit class: 'px-4 py-2 font-bold text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50' %>
+  </div>
 <% end %>

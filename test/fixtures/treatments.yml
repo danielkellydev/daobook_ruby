@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  consultation: one
+  treatment_principle: MyString
+  formula_name: MyString
+  formula_composition: MyText
+  dosage: MyString
+  administration_instructions: MyText
+  acupuncture: MyText
+  other_modalities: MyText
+  lifestyle: MyText
+
+two:
+  consultation: two
+  treatment_principle: MyString
+  formula_name: MyString
+  formula_composition: MyText
+  dosage: MyString
+  administration_instructions: MyText
+  acupuncture: MyText
+  other_modalities: MyText
+  lifestyle: MyText
