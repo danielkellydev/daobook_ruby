@@ -1,22 +1,24 @@
-<%= form_with(model: [@client, @consultation], local: true, class: 'space-y-4', data: { controller: 'consultation-type', consultation_type_url_value: consultation_fields_consultations_path }) do |form| %>
-  <div>
-    <%= form.label :consultation_type, class: 'block font-bold' %>
-    <%= form.select :consultation_type, options_for_select(['Initial', 'Return'], @consultation.consultation_type), {}, { class: 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50', data: { action: 'change->consultation-type#loadFields' } } %>
-  </div>
+<div class="flex justify-center items-center">
+  <%= form_with(model: [@client, @consultation], local: true, class: 'space-y-6 w-2/3', data: { controller: 'consultation-type', consultation_type_url_value: consultation_fields_consultations_path }) do |form| %>
+    <div class="mb-4">
+      <%= form.label :consultation_type, class: 'block text-gray-700 font-bold mb-2' %>
+      <%= form.select :consultation_type, options_for_select(['Initial', 'Return'], @consultation.consultation_type), {}, { class: 'mt-1 block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50', data: { action: 'change->consultation-type#loadFields' } } %>
+    </div>
 
-  <%= tag.div id: 'consultation_fields' do %>
-    <% if @consultation.consultation_type == 'Initial' || @consultation.consultation_type.nil? %>
-      <%= render 'initial_consultation_fields', form: form %>
-    <% elsif @consultation.consultation_type == 'Return' %>
-      <%= render 'return_consultation_fields', form: form %>
+    <%= tag.div id: 'consultation_fields', class: 'mb-4' do %>
+      <% if @consultation.consultation_type == 'Initial' || @consultation.consultation_type.nil? %>
+        <%= render 'initial_consultation_fields', form: form %>
+      <% elsif @consultation.consultation_type == 'Return' %>
+        <%= render 'return_consultation_fields', form: form %>
+      <% end %>
     <% end %>
-  <% end %>
 
-  <%= fields_for :treatment, @consultation.treatment || @consultation.build_treatment do |treatment_form| %>
-    <%= render 'treatment_fields', form: treatment_form %>
-  <% end %>
+    <%= fields_for :treatment, @consultation.treatment || @consultation.build_treatment do |treatment_form| %>
+      <%= render 'treatment_fields', form: treatment_form %>
+    <% end %>
 
-  <div>
-    <%= form.submit class: 'px-4 py-2 font-bold text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50' %>
-  </div>
-<% end %>
+    <div class="mt-6">
+      <%= form.submit class: 'px-4 py-2 font-bold text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500' %>
+    </div>
+  <% end %>
+</div>
