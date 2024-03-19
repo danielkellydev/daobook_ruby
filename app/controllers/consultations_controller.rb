@@ -14,9 +14,31 @@ class ConsultationsController < ApplicationController
   end
 
   def create
-    @consultation = @client.consultations.build(permitted_params.merge(params.permit(:progress_since_last_visit, :tongue_diagnosis, :pulse_diagnosis, :abdominal_palpation, :tcm_diagnosis)))
+    consultation_params = params.require(:consultation).permit(
+      :consultation_type,
+      :chief_concern,
+      :other_symptoms,
+      :tongue_diagnosis,
+      :pulse_diagnosis,
+      :abdominal_palpation,
+      :tcm_diagnosis
+    )
+  
+    if params[:consultation][:consultation_type] == 'Return'
+      consultation_params = consultation_params.merge(
+        progress_since_last_visit: params[:progress_since_last_visit],
+        tongue_diagnosis: params[:tongue_diagnosis],
+        pulse_diagnosis: params[:pulse_diagnosis],
+        abdominal_palpation: params[:abdominal_palpation],
+        tcm_diagnosis: params[:tcm_diagnosis]
+      )
+    end
+  
+    @consultation = @client.consultations.build(consultation_params)
     @consultation.practitioner = current_practitioner
-   
+  
+    @treatment = @consultation.build_treatment(treatment_params)
+  
     respond_to do |format|
       if @consultation.save
         format.html { redirect_to client_consultation_path(@client, @consultation), notice: 'Consultation was successfully created.' }
@@ -33,12 +55,21 @@ class ConsultationsController < ApplicationController
   end
 
   def edit
+    @client = @consultation.client
     render partial: 'form', locals: { consultation: @consultation } if request.format.turbo_frame?
   end
 
   def update
     if @consultation.update(consultation_params)
-      redirect_to client_consultation_path(@client, @consultation), notice: 'Consultation was successfully updated.'
+      if @consultation.treatment.present?
+        if @consultation.treatment.update(treatment_params)
+          redirect_to client_consultation_path(@client, @consultation), notice: 'Consultation was successfully updated.'
+        else
+          render :edit
+        end
+      else
+        redirect_to client_consultation_path(@client, @consultation), notice: 'Consultation was successfully updated.'
+      end
     else
       render :edit
     end
@@ -74,6 +105,20 @@ class ConsultationsController < ApplicationController
       :abdominal_palpation,
       :tcm_diagnosis,
       :progress_since_last_visit
+    )
+  end
+
+  def treatment_params
+    params.require(:treatment).permit(
+      :treatment_principle,
+      :formula_name,
+      :formula_composition,
+      :dosage,
+      :administration,
+      :acupuncture_treatment,
+      :diet_lifestyle,
+      :other_treatments,
+      :treatment_plan
     )
   end
 end

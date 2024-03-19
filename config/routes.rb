@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   resources :provider_numbers
 
   resources :clients do
-    resources :consultations, only: [:index, :new, :create, :show]
+    resources :consultations
   end
 
   resources :consultations, only: [:edit, :update] do

@@ -1,17 +1,14 @@
 <div class="container mx-auto px-4 py-8">
   <h1 class="text-2xl font-bold mb-4">Consultation Details</h1>
-  
   <p><strong>Client:</strong> <%= @consultation.client.first_name %> <%= @consultation.client.last_name %></p>
   <p><strong>Practitioner:</strong> <%= @consultation.practitioner.first_name %> <%= @consultation.practitioner.last_name %></p>
-  
   <p><strong>Consultation Type:</strong> <%= @consultation.consultation_type %></p>
-  
+
   <% if @consultation.consultation_type == 'Initial' %>
     <div class="bg-gray-100 rounded-md p-4 mb-4">
       <p><strong>Chief Concern:</strong></p>
       <%= simple_format(@consultation.chief_concern) %>
     </div>
-    
     <div class="bg-gray-100 rounded-md p-4 mb-4">
       <p><strong>Other Symptoms:</strong></p>
       <%= simple_format(@consultation.other_symptoms) %>
@@ -22,26 +19,62 @@
       <%= simple_format(@consultation.progress_since_last_visit) %>
     </div>
   <% end %>
-  
+
   <div class="bg-gray-100 rounded-md p-4 mb-4">
     <p><strong>Tongue Diagnosis:</strong></p>
     <%= simple_format(@consultation.tongue_diagnosis) %>
   </div>
-  
   <div class="bg-gray-100 rounded-md p-4 mb-4">
     <p><strong>Pulse Diagnosis:</strong></p>
     <%= simple_format(@consultation.pulse_diagnosis) %>
   </div>
-  
   <div class="bg-gray-100 rounded-md p-4 mb-4">
     <p><strong>Abdominal Palpation:</strong></p>
     <%= simple_format(@consultation.abdominal_palpation) %>
   </div>
-  
   <div class="bg-gray-100 rounded-md p-4 mb-4">
     <p><strong>TCM Diagnosis:</strong></p>
     <%= simple_format(@consultation.tcm_diagnosis) %>
   </div>
-  
-  <%= link_to 'Edit', edit_consultation_path(@consultation), class: 'mt-4 inline-block px-4 py-2 font-bold text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50' %>
+
+  <% if @consultation.treatment.present? %>
+    <div class="bg-gray-100 rounded-md p-4 mb-4">
+      <p><strong>Treatment Principle:</strong></p>
+      <%= simple_format(@consultation.treatment.treatment_principle) %>
+    </div>
+    <div class="bg-gray-100 rounded-md p-4 mb-4">
+      <p><strong>Formula Name:</strong></p>
+      <%= simple_format(@consultation.treatment.formula_name) %>
+    </div>
+    <div class="bg-gray-100 rounded-md p-4 mb-4">
+      <p><strong>Formula Composition:</strong></p>
+      <%= simple_format(@consultation.treatment.formula_composition) %>
+    </div>
+    <div class="bg-gray-100 rounded-md p-4 mb-4">
+      <p><strong>Dosage:</strong></p>
+      <%= simple_format(@consultation.treatment.dosage) %>
+    </div>
+    <div class="bg-gray-100 rounded-md p-4 mb-4">
+      <p><strong>Administration:</strong></p>
+      <%= simple_format(@consultation.treatment.administration) %>
+    </div>
+    <div class="bg-gray-100 rounded-md p-4 mb-4">
+      <p><strong>Acupuncture Treatment:</strong></p>
+      <%= simple_format(@consultation.treatment.acupuncture_treatment) %>
+    </div>
+    <div class="bg-gray-100 rounded-md p-4 mb-4">
+      <p><strong>Diet & Lifestyle:</strong></p>
+      <%= simple_format(@consultation.treatment.diet_lifestyle) %>
+    </div>
+    <div class="bg-gray-100 rounded-md p-4 mb-4">
+      <p><strong>Other Treatments:</strong></p>
+      <%= simple_format(@consultation.treatment.other_treatments) %>
+    </div>
+    <div class="bg-gray-100 rounded-md p-4 mb-4">
+      <p><strong>Treatment Plan:</strong></p>
+      <%= simple_format(@consultation.treatment.treatment_plan) %>
+    </div>
+  <% end %>
+
+  <%= link_to 'Edit', edit_client_consultation_path(@consultation.client, @consultation), class: 'mt-4 inline-block px-4 py-2 font-bold text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50' %>
 </div>

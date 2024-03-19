@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_14_213645) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_18_233445) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -90,12 +90,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_14_213645) do
     t.string "formula_name"
     t.text "formula_composition"
     t.string "dosage"
-    t.text "administration_instructions"
-    t.text "acupuncture"
-    t.text "other_modalities"
-    t.text "lifestyle"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "administration"
+    t.text "acupuncture_treatment"
+    t.text "diet_lifestyle"
+    t.text "other_treatments"
+    t.text "treatment_plan"
     t.index ["consultation_id"], name: "index_treatments_on_consultation_id"
   end
 
