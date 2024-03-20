@@ -8,3 +8,6 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 require_relative 'seeds/health_funds'
+
+AppointmentType.create(name: 'Initial Consultation', duration: 60)
+AppointmentType.create(name: 'Follow-up Consultation', duration: 30)

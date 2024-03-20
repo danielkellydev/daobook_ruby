@@ -9,6 +9,8 @@ Rails.application.routes.draw do
     resources :consultations
   end
 
+  resources :appointments
+
   resources :consultations, only: [:edit, :update] do
     collection do
       get :consultation_fields

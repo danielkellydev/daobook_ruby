@@ -8,4 +8,5 @@ class Practitioner < ApplicationRecord
   has_many :provider_numbers, dependent: :destroy
   has_many :consultations 
   has_many :treatments, through: :consultations
+  has_many :appointments
 end

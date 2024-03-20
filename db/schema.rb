@@ -10,9 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_18_233445) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_19_233343) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "appointment_types", force: :cascade do |t|
+    t.string "name"
+    t.integer "duration"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "appointments", force: :cascade do |t|
+    t.bigint "client_id", null: false
+    t.bigint "practitioner_id", null: false
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.string "appointment_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_appointments_on_client_id"
+    t.index ["practitioner_id"], name: "index_appointments_on_practitioner_id"
+  end
 
   create_table "clients", force: :cascade do |t|
     t.string "first_name"
@@ -100,6 +119,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_18_233445) do
     t.index ["consultation_id"], name: "index_treatments_on_consultation_id"
   end
 
+  add_foreign_key "appointments", "clients"
+  add_foreign_key "appointments", "practitioners"
   add_foreign_key "clients", "practitioners"
   add_foreign_key "consultations", "clients"
   add_foreign_key "consultations", "practitioners"
