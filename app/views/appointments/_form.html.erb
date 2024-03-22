@@ -4,15 +4,12 @@
     <%= form.collection_select :client_id, Client.all, :id, proc { |client| "#{client.first_name} #{client.last_name}" }, { prompt: 'Select Client' }, class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
   </div>
 
-  <div class="mb-4">
-    <%= form.label :practitioner_id, class: "block text-gray-700 font-bold mb-2" %>
-    <%= form.collection_select :practitioner_id, Practitioner.all, :id, proc { |practitioner| "#{practitioner.first_name} #{practitioner.last_name}" }, { prompt: 'Select Practitioner' }, class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
-  </div>
+  <%= form.hidden_field :practitioner_id %>
 
   <div class="mb-4">
-    <%= form.label :appointment_type_id, class: "block text-gray-700 font-bold mb-2" %>
-    <%= form.collection_select :appointment_type_id, @appointment_types, :id, :name, { prompt: 'Select Appointment Type' }, class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
-  </div>
+  <%= form.label :appointment_type, class: "block text-gray-700 font-bold mb-2" %>
+  <%= form.collection_select :appointment_type, @appointment_types, :id, :name, { prompt: 'Select Appointment Type' }, class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
+</div>
 
   <div class="mb-4">
     <%= form.label :start_time, class: "block text-gray-700 font-bold mb-2" %>

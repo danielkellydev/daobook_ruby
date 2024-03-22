@@ -11,24 +11,35 @@ class AppointmentsController < ApplicationController
   end
 
   def create
-    Rails.logger.debug "Raw parameters: #{request.raw_post}"
+    Rails.logger.debug "Appointment params: #{appointment_params.inspect}"
     @appointment = Appointment.new(appointment_params)
+    @appointment.practitioner_id = current_practitioner.id
     
-    if appointment_type_id = params[:appointment][:appointment_type_id]
-      @appointment.appointment_type = AppointmentType.find_by(id: appointment_type_id)
-    end
-  
+    Rails.logger.debug "Appointment object: #{@appointment.inspect}"
+    Rails.logger.debug "Appointment errors: #{@appointment.errors.full_messages}" if @appointment.errors.any?
+    
     if @appointment.save
+      Rails.logger.debug "Appointment saved successfully"
       redirect_to appointments_path, notice: 'Appointment created successfully.'
     else
-      render :new
+      Rails.logger.debug "Appointment save failed"
+      redirect_to new_appointment_path, alert: 'Appointment creation failed.'
     end
   end
 
   private
 
   def appointment_params
-    params.require(:appointment).permit(:client_id, :practitioner_id, :start_time, :end_time, :appointment_type_id)
+    Rails.logger.debug "Raw appointment params: #{params[:appointment].inspect}"
+    permitted_params = params.permit(:client_id, :practitioner_id, :start_time, :appointment_type)
+    Rails.logger.debug "Permitted appointment params: #{permitted_params.inspect}"
+  
+    if permitted_params[:appointment_type].present?
+      appointment_type = AppointmentType.find(permitted_params[:appointment_type])
+      permitted_params[:appointment_type] = appointment_type
+    end
+  
+    permitted_params
   end
 
   def generate_time_options
