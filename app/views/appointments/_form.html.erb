@@ -1,20 +1,24 @@
 <%= form_with(model: @appointment, url: appointments_path, local: true, class: "mt-4") do |form| %>
-  <div class="mb-4">
-    <%= form.label :client_id, class: "block text-gray-700 font-bold mb-2" %>
-    <%= form.collection_select :client_id, Client.all, :id, proc { |client| "#{client.first_name} #{client.last_name}" }, { prompt: 'Select Client' }, class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
-  </div>
+  <%= form.hidden_field :selected_date, 'data-appointment-modal-target': 'date' %>
 
-  <%= form.hidden_field :practitioner_id %>
+  <%= fields_for :appointment do |appointment_fields| %>
+    <div class="mb-4">
+      <%= appointment_fields.label :client_id, class: "block text-gray-700 font-bold mb-2" %>
+      <%= appointment_fields.collection_select :client_id, Client.all, :id, proc { |client| "#{client.first_name} #{client.last_name}" }, { prompt: 'Select Client' }, class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
+    </div>
 
-  <div class="mb-4">
-  <%= form.label :appointment_type, class: "block text-gray-700 font-bold mb-2" %>
-  <%= form.collection_select :appointment_type, @appointment_types, :id, :name, { prompt: 'Select Appointment Type' }, class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
-</div>
+    <%= appointment_fields.hidden_field :practitioner_id %>
 
-  <div class="mb-4">
-    <%= form.label :start_time, class: "block text-gray-700 font-bold mb-2" %>
-    <%= form.select :start_time, @time_options, { prompt: 'Select Start Time' }, class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
-  </div>
+    <div class="mb-4">
+      <%= appointment_fields.label :appointment_type, class: "block text-gray-700 font-bold mb-2" %>
+      <%= appointment_fields.collection_select :appointment_type, @appointment_types, :id, :name, { prompt: 'Select Appointment Type' }, class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
+    </div>
+
+    <div class="mb-4">
+      <%= appointment_fields.label :start_time, class: "block text-gray-700 font-bold mb-2" %>
+      <%= appointment_fields.select :start_time, options_for_select(@time_options.map { |time| [time.in_time_zone(Time.zone).strftime("%I:%M %p"), time.to_s] }), { prompt: 'Select Start Time' }, class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
+    </div>
+  <% end %>
 
   <div class="px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
     <%= form.submit 'Create Appointment', class: "w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm" %>

@@ -4,4 +4,8 @@ class Client < ApplicationRecord
   has_many :consultations
   has_many :treatments, through: :consultations
   has_many :appointments
+  
+  def full_name
+    "#{first_name} #{last_name}"
+  end
 end

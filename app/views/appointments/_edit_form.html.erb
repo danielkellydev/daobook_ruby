@@ -1,0 +1,24 @@
+<%= form_with(model: @appointment, url: appointment_path(@appointment), method: :patch, local: true, class: "mt-4") do |form| %>
+  <%= form.hidden_field :selected_date, 'data-appointment-modal-target': 'date' %>
+
+  <div class="mb-4">
+    <%= form.label :client_id, class: "block text-gray-700 font-bold mb-2" %>
+    <%= form.collection_select :client_id, Client.all, :id, proc { |client| "#{client.first_name} #{client.last_name}" }, {}, class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
+  </div>
+
+  <%= form.hidden_field :practitioner_id %>
+
+  <div class="mb-4">
+    <%= form.label :appointment_type, class: "block text-gray-700 font-bold mb-2" %>
+    <%= form.collection_select :appointment_type, @appointment_types, :id, :name, {}, class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
+  </div>
+
+  <div class="mb-4">
+    <%= form.label :start_time, class: "block text-gray-700 font-bold mb-2" %>
+    <%= form.select :start_time, options_for_select(@time_options.map { |time| [time.in_time_zone(Time.zone).strftime("%I:%M %p"), time.to_s] }), {}, class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
+  </div>
+
+  <div class="px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+    <%= form.submit 'Update Appointment', class: "w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm" %>
+  </div>
+<% end %>
