@@ -1,13 +1,12 @@
 <%= form_with(model: @appointment, url: appointments_path, local: true, class: "mt-4") do |form| %>
-  <%= form.hidden_field :selected_date, 'data-appointment-modal-target': 'date' %>
-
+  <%= form.hidden_field :practitioner_id, value: current_practitioner.id %>
   <%= fields_for :appointment do |appointment_fields| %>
+    <%= appointment_fields.hidden_field :selected_date, 'data-appointment-modal-target': 'date', id: 'selected_date' %>
+    <%= appointment_fields.hidden_field :start_time, id: 'start_time' %>
     <div class="mb-4">
       <%= appointment_fields.label :client_id, class: "block text-gray-700 font-bold mb-2" %>
       <%= appointment_fields.collection_select :client_id, Client.all, :id, proc { |client| "#{client.first_name} #{client.last_name}" }, { prompt: 'Select Client' }, class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
     </div>
-
-    <%= appointment_fields.hidden_field :practitioner_id %>
 
     <div class="mb-4">
       <%= appointment_fields.label :appointment_type, class: "block text-gray-700 font-bold mb-2" %>

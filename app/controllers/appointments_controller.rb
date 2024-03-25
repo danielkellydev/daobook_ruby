@@ -4,6 +4,13 @@ class AppointmentsController < ApplicationController
   def index
     @appointments = Appointment.all
     @view = params[:view] || 'week'
+  
+    if @view == 'week'
+      today = Date.today
+      start_date = today.beginning_of_week
+      end_date = today.end_of_week
+      @date_range = start_date..end_date
+    end
   end
 
   def new
@@ -38,19 +45,13 @@ class AppointmentsController < ApplicationController
   end
 
   def create
-    Rails.logger.debug "Appointment params: #{appointment_params.inspect}"
     @appointment = Appointment.new(appointment_params)
-    @appointment.practitioner_id = current_practitioner.id
-    
-    Rails.logger.debug "Appointment object: #{@appointment.inspect}"
-    Rails.logger.debug "Appointment errors: #{@appointment.errors.full_messages}" if @appointment.errors.any?
-    
+    @appointment.practitioner = current_practitioner
+  
     if @appointment.save
-      Rails.logger.debug "Appointment saved successfully"
       redirect_to appointments_path, notice: 'Appointment created successfully.'
     else
-      Rails.logger.debug "Appointment save failed"
-      redirect_to new_appointment_path, alert: 'Appointment creation failed.'
+      render 'form', alert: 'Appointment creation failed.'
     end
   end
 
@@ -59,19 +60,25 @@ class AppointmentsController < ApplicationController
   def appointment_params
     permitted_params = params.require(:appointment).permit(:client_id, :practitioner_id, :appointment_type, :selected_date, :start_time)
   
-    if permitted_params[:start_time].present?
-      permitted_params[:start_time] = Time.parse(permitted_params[:start_time]).in_time_zone(Time.zone)
+    if permitted_params[:selected_date].present?
+      selected_date = Date.parse(permitted_params[:selected_date])
+      permitted_params[:selected_date] = selected_date
     end
-
+  
+    if permitted_params[:start_time].present?
+      start_time = Time.parse(permitted_params[:start_time]).in_time_zone(Time.zone)
+      permitted_params[:start_time] = start_time
+    end
+  
     if permitted_params[:appointment_type].present?
       appointment_type = AppointmentType.find(permitted_params[:appointment_type])
       permitted_params[:appointment_type] = appointment_type
     end
   
     if permitted_params[:selected_date].present? && permitted_params[:start_time].present?
-      selected_date = Date.parse(permitted_params[:selected_date])
-      start_time = Time.parse(permitted_params[:start_time])
-      permitted_params[:start_time] = DateTime.new(selected_date.year, selected_date.month, selected_date.day, start_time.hour, start_time.min)
+      selected_date = permitted_params[:selected_date]
+      start_time = permitted_params[:start_time]
+      permitted_params[:start_time] = start_time.change(year: selected_date.year, month: selected_date.month, day: selected_date.day)
     end
   
     permitted_params

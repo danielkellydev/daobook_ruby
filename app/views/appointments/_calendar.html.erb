@@ -13,7 +13,8 @@
       <div class="px-4 py-5 sm:p-6">
         <% if params[:view] == 'month' %>
           <%= month_calendar(events: @appointments, class: "text-center border-collapse w-full") do |date, appointments| %>
-            <div class="px-4 py-8 border border-gray-200 min-h-32" data-action="click->appointment-modal#openModal" data-appointment-modal-target="date" data-date="<%= date.strftime('%Y-%m-%d') %>">              <div class="text-lg font-semibold text-gray-800">
+            <div class="px-4 py-8 border border-gray-200 min-h-32" data-action="click->appointment-modal#openModal" data-appointment-modal-target="date" data-date="<%= date.strftime('%Y-%m-%d') %>">              
+              <div class="text-lg font-semibold text-gray-800">
                 <%= date.day %>
               </div>
               <% appointments.each do |appointment| %>
@@ -31,32 +32,50 @@
             </div>
           <% end %>
         <% else %>
-          <%= week_calendar(events: @appointments, class: "text-center border-collapse w-full") do |date, appointments| %>
-            <div class="px-4 py-8 border border-gray-200 min-h-32" data-action="click->appointment-modal#openModal" data-appointment-modal-target="date" data-date="<%= date.strftime('%Y-%m-%d') %>">
-              <div class="text-lg font-semibold text-gray-800">
-                <%= date.strftime('%a %d') %>
-              </div>
-                <% appointments.each do |appointment| %>
-                  <div class="mt-2">
-                    <%= link_to "#{appointment.client.first_name} #{appointment.client.last_name}", appointment_path(appointment), remote: true, class: "text-blue-500 hover:text-blue-700" %>
-                    <div class="text-sm text-gray-600">
-                      <% if appointment.appointment_type.present? %>
-                        <%= appointment.appointment_type.name %>
-                      <% else %>
-                        No Appointment Type
-                      <% end %>
-                      <% if appointment.start_time.present? && appointment.appointment_type.present? %>
-                        <% duration_in_minutes = appointment.appointment_type.duration %>
-                        <% end_time = appointment.start_time + duration_in_minutes.minutes %>
-                        <span class="ml-2">
-                          <%= appointment.start_time.strftime("%I:%M %p") %> - <%= end_time.strftime("%I:%M %p") %>
-                        </span>
-                      <% end %>
-                    </div>
-                  </div>
+          <table class="text-center border-collapse w-full">
+            <thead>
+              <tr>
+                <th class="px-4 py-2 border border-gray-200"></th>
+                <% @date_range.each do |date| %>
+                  <th class="px-4 py-2 border border-gray-200">
+                    <%= date.strftime('%a %d') %>
+                  </th>
                 <% end %>
-            </div>
-          <% end %>
+              </tr>
+            </thead>
+            <tbody>
+              <% (0..95).each do |index| %>
+                <% time = @date_range.first.beginning_of_day + (index * 15.minutes) %>
+                <tr>
+                  <% if index % 4 == 0 %>
+                    <td class="px-4 py-2 border border-gray-200 font-semibold text-gray-800" rowspan="4">
+                      <%= time.strftime('%l %p') %>
+                    </td>
+                  <% end %>
+                  <% @date_range.each do |date| %>
+                    <td class="px-4 py-2 border border-gray-200 cursor-pointer h-16"
+                        data-action="click->appointment-modal#openModal"
+                        data-appointment-modal-target="date"
+                        data-date="<%= date.strftime('%Y-%m-%d') %>"
+                        data-time="<%= time.strftime('%H:%M') %>">
+                      <% @appointments.select { |a| a.start_time.to_date == date && a.start_time.strftime('%H:%M') == time.strftime('%H:%M') }.each do |appointment| %>
+                        <div class="mt-2">
+                          <%= link_to "#{appointment.client.first_name} #{appointment.client.last_name}", appointment_path(appointment), remote: true, class: "text-blue-500 hover:text-blue-700" %>
+                          <div class="text-sm text-gray-600">
+                            <% if appointment.appointment_type.present? %>
+                              <%= appointment.appointment_type.name %>
+                            <% else %>
+                              No Appointment Type
+                            <% end %>
+                          </div>
+                        </div>
+                      <% end %>
+                    </td>
+                  <% end %>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
         <% end %>
       </div>
     </div>
