@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   end
 
   resources :appointments
+  resources :practitioner_schedules, only: [:index]
 
   resources :consultations, only: [:edit, :update] do
     collection do
