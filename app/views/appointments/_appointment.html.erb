@@ -1,6 +1,6 @@
 <div>
- <%= link_to "#{appointment.client.first_name} #{appointment.client.last_name}", appointment_path(appointment), remote: true, class: "text-blue-500 hover:text-blue-700" %>
+ <%= link_to "#{appointment.client.first_name} #{appointment.client.last_name}", appointment_path(appointment), remote: true, class: "text-blue-500 hover:text-blue-700", data: { modal_target: "appointment" } %>
  <div class="text-xs text-gray-600">
-   <%= appointment.start_time.strftime('%l:%M') %> - <%= (appointment.start_time + appointment.appointment_type.duration.minutes).strftime('%l:%M') %>
+   <%= appointment.start_time.strftime('%l:%M') %> - <%= (appointment.start_time + (appointment.appointment_type ? appointment.appointment_type.duration : 0).minutes).strftime('%l:%M') %>
  </div>
 </div>
