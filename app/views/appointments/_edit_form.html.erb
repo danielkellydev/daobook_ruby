@@ -1,4 +1,4 @@
-<%= form_with(model: @appointment, url: appointment_path(@appointment), method: :patch, local: true, class: "mt-4") do |form| %>
+<%= form_with(model: appointment, url: appointment_path(appointment), method: :patch, local: true, class: "mt-4") do |form| %>
   <%= form.hidden_field :selected_date, 'data-appointment-modal-target': 'date' %>
 
   <div class="mb-4">

@@ -1,0 +1,19 @@
+<div data-appointment-id="<%= appointment.id %>">
+  <div class="mb-4">
+    <p><strong>Client:</strong> <%= appointment.client.full_name %></p>
+    <p><strong>Practitioner:</strong> <%= appointment.practitioner.full_name %></p>
+    <p><strong>Appointment Type:</strong> <%= appointment.appointment_type ? appointment.appointment_type.name : 'N/A' %></p>
+    <p>
+      <strong>Start Time:</strong> <%= appointment.start_time.present? ? appointment.start_time.strftime("%B %d, %Y %I:%M %p") : 'N/A' %>
+    </p>
+    <% if appointment.appointment_type.present? %>
+      <% duration_in_minutes = appointment.appointment_type.duration %>
+      <% end_time = appointment.start_time.present? ? appointment.start_time + duration_in_minutes.minutes : nil %>
+      <p>
+        <strong>End Time:</strong> <%= end_time.present? ? end_time.strftime("%B %d, %Y %I:%M %p") : 'N/A' %>
+      </p>
+    <% else %>
+      <p><strong>End Time:</strong> N/A</p>
+    <% end %>
+  </div>
+</div>

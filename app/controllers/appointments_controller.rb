@@ -15,18 +15,20 @@ class AppointmentsController < ApplicationController
 
   def new
     @appointment = Appointment.new
+    @selected_time = params[:start_time]
+    logger.debug "Selected Time in Controller: #{@selected_time}"
   end
 
   def show
     @appointment = Appointment.find(params[:id])
+    render partial: 'appointments/show', locals: { appointment: @appointment }
   end
 
   def edit
     @appointment = Appointment.find(params[:id])
     @appointment_types = AppointmentType.all
-  
-    # Generate time options
     @time_options = generate_time_options
+    render partial: 'appointments/edit_form', locals: { appointment: @appointment }
   end
   
   def destroy

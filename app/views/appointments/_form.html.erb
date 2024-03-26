@@ -15,11 +15,12 @@
 
     <div class="mb-4">
       <%= appointment_fields.label :start_time, class: "block text-gray-700 font-bold mb-2" %>
-      <%= appointment_fields.select :start_time, options_for_select(@time_options.map { |time| [time.in_time_zone(Time.zone).strftime("%I:%M %p"), time.to_s] }), { prompt: 'Select Start Time' }, class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
+      <% logger.debug "Selected Time in Form: #{@selected_time}" %>
+      <%= appointment_fields.select :start_time, options_for_select(@time_options.map { |time| [time.in_time_zone(Time.zone).strftime("%I:%M %p"), time.to_s] }, @selected_time), { prompt: 'Select Start Time' }, class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", id: "start_time_dropdown" %>
     </div>
-  <% end %>
 
   <div class="px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
     <%= form.submit 'Create Appointment', class: "w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm" %>
   </div>
+<% end %>
 <% end %>

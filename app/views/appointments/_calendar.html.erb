@@ -18,8 +18,10 @@
                <%= date.day %>
              </div>
              <% appointments.each do |appointment| %>
-               <%= render 'appointments/appointment', appointment: appointment %>
-             <% end %>
+              <div class="appointment" data-appointment-id="<%= appointment.id %>">
+                <%= render 'appointments/appointment', appointment: appointment %>
+              </div>
+            <% end %>
            </div>
          <% end %>
        <% else %>
@@ -56,14 +58,14 @@
                         <% duration = appointment.appointment_type.duration || 60 %>
                         <% rows = duration / 15 %>
                         <% spanned_rows[i] = rows - 1 %>
-                        <td class="px-2 py-1 border border-gray-200 cursor-pointer" rowspan="<%= rows %>" data-action="click->appointment-modal#openModal" data-appointment-modal-target="date" data-date="<%= date.strftime('%Y-%m-%d') %>" data-time="<%= time.strftime('%H:%M') %>">
+                        <td class="px-2 py-1 border border-gray-200 cursor-pointer" rowspan="<%= rows %>" data-action="click->appointment-modal#showAppointment" data-appointment-id="<%= appointment.id %>">
                           <%= render 'appointments/appointment', appointment: appointment %>
                         </td>
                       <% elsif spanned_rows[i].to_i > 0 %>
                         <% spanned_rows[i] -= 1 %>
                       <% else %>
                         <td class="px-2 py-1 border border-gray-200 cursor-pointer h-8 w-32" 
-                            data-action="click->appointment-modal#openModal"
+                            data-action="click->appointment-modal#openModal appointment-modal#setStartTimeDropdown"
                             data-appointment-modal-target="date"
                             data-date="<%= date.strftime('%Y-%m-%d') %>"
                             data-time="<%= time.strftime('%H:%M') %>">
@@ -81,5 +83,9 @@
  </div>
 
  <!-- Modal -->
-<%= render 'modal' %>
+<%= render 'modal', selected_time: nil %>
+<% @appointments.each do |appointment| %>
+  <%= render 'show_modal', appointment: appointment %>
+  <%= render 'edit_modal', appointment: appointment %>
+<% end %>
 </div>
