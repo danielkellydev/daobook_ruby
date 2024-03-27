@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_26_014944) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_27_093906) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -90,6 +90,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_26_014944) do
     t.date "date_of_birth"
     t.string "ahpra_number"
     t.string "phone_number"
+    t.string "working_days", default: "1111111"
+    t.time "start_time", default: "2000-01-01 09:00:00"
+    t.time "end_time", default: "2000-01-01 17:00:00"
     t.index ["email"], name: "index_practitioners_on_email", unique: true
     t.index ["reset_password_token"], name: "index_practitioners_on_reset_password_token", unique: true
   end
