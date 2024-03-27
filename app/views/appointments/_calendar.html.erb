@@ -11,6 +11,7 @@
        </div>
      </div>
      <div class="px-4 py-5 sm:p-6">
+      <turbo-frame id="calendar">
        <% if params[:view] == 'month' %>
          <%= month_calendar(events: @appointments, class: "text-center border-collapse w-full") do |date, appointments| %>
            <div class="px-4 py-8 border border-gray-200 min-h-32" data-action="click->appointment-modal#openModal" data-appointment-modal-target="date" data-date="<%= date.strftime('%Y-%m-%d') %>">
@@ -35,7 +36,7 @@
                <tr>
                  <th class="px-2 py-1 border border-gray-200 w-12"></th>
                  <% 7.times do |i| %>
-                   <% date = @date_range.first + i.days %>
+                   <% date = date_range.first + i.days %>
                    <th class="px-2 py-1 border border-gray-200 w-32">
                      <%= date.strftime('%a %d') %>
                    </th>
@@ -85,12 +86,13 @@
            </table>
          </div>
        <% end %>
+       </turbo-frame>
      </div>
    </div>
  </div>
 
  <!-- Modal -->
-<%= render 'modal', selected_time: nil %>
+<%= render 'modal', selected_time: @selected_time %>
 <% @appointments.each do |appointment| %>
   <%= render 'show_modal', appointment: appointment %>
   <%= render 'edit_modal', appointment: appointment %>

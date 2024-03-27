@@ -4,7 +4,7 @@ class AppointmentsController < ApplicationController
   def index
     @appointments = Appointment.all
     @view = params[:view] || 'week'
-  
+    
     if @view == 'week'
       today = Date.today
       start_date = today.beginning_of_week
@@ -27,7 +27,7 @@ class AppointmentsController < ApplicationController
   def edit
     @appointment = Appointment.find(params[:id])
     @appointment_types = AppointmentType.all
-    @time_options = generate_time_options
+    @time_options = generate_time_options(@appointment.start_time.to_date)
     render partial: 'appointments/edit_form', locals: { appointment: @appointment }
   end
   
@@ -39,14 +39,29 @@ class AppointmentsController < ApplicationController
 
   def update
     @appointment = Appointment.find(params[:id])
+    @appointment_types = AppointmentType.all
+    @time_options = generate_time_options(@appointment.start_time.to_date)
+  
     if @appointment.update(appointment_params)
-      render json: {
-        status: 'success', 
-        message: 'Appointment was successfully updated.', 
-        appointment_html: view_context.turbo_frame_tag("appointment_#{@appointment.id}") do 
-          render_to_string(partial: 'appointments/appointment', locals: { appointment: @appointment })
+      @view = params[:view] || 'week'
+      if @view == 'week'
+        today = Date.today
+        start_date = today.beginning_of_week
+        end_date = today.end_of_week
+        @date_range = start_date..end_date
+      end
+  
+      @appointments = Appointment.all
+  
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: [
+            turbo_stream.remove("edit-appointment-modal"),
+            turbo_stream.replace("calendar-container", partial: "calendar_container", locals: { appointments: @appointments, date_range: @date_range })
+          ]
         end
-      }
+        format.html { redirect_to appointments_path, notice: 'Appointment was successfully updated.' }
+      end
     else
       render json: {
         status: 'error',
@@ -62,7 +77,8 @@ class AppointmentsController < ApplicationController
     if @appointment.save
       redirect_to appointments_path, notice: 'Appointment created successfully.'
     else
-      render 'form', alert: 'Appointment creation failed.'
+      flash[:alert] = 'Appointment creation failed.'
+      redirect_to new_appointment_path
     end
   end
 
@@ -95,20 +111,20 @@ class AppointmentsController < ApplicationController
     permitted_params
   end
 
-  def generate_time_options
-  start_time = Time.current.beginning_of_day
-  end_time = start_time.end_of_day
-  interval = 15.minutes
-  options = []
-  current_time = start_time
-
-  while current_time <= end_time
-    options << current_time
-    current_time += interval
+  def generate_time_options(date = Date.current)
+    start_time = date.beginning_of_day
+    end_time = start_time.end_of_day
+    interval = 15.minutes
+    options = []
+    current_time = start_time
+  
+    while current_time <= end_time
+      options << current_time
+      current_time += interval
+    end
+  
+    options
   end
-
-  options
-end
 
   def set_appointment_types_and_time_options
     @appointment_types = AppointmentType.all

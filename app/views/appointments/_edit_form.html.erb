@@ -1,4 +1,4 @@
-<%= form_with(model: appointment, url: appointment_path(appointment), method: :patch, local: true, class: "mt-4") do |form| %>
+<%= form_with(model: appointment, url: appointment_path(appointment), method: :patch, data: { turbo_frame: "_top" }, local: true, class: "mt-4") do |form| %>
   <%= form.hidden_field :selected_date, 'data-appointment-modal-target': 'date' %>
 
   <div class="mb-4">
@@ -15,7 +15,7 @@
 
   <div class="mb-4">
     <%= form.label :start_time, class: "block text-gray-700 font-bold mb-2" %>
-    <%= form.select :start_time, options_for_select(@time_options.map { |time| [time.in_time_zone(Time.zone).strftime("%I:%M %p"), time.to_s] }), {}, class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
+    <%= form.select :start_time, options_for_select(@time_options.map { |time| [time.in_time_zone(Time.zone).strftime("%I:%M %p"), time.to_s] }, appointment.start_time), {}, class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
   </div>
 
   <div class="px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">

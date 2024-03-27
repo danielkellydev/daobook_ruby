@@ -1,8 +1,10 @@
-<div data-action="click->appointment-modal#showAppointment" data-appointment-id="<%= appointment.id %>" data-controller="appointment-drag">
-  <div>
-    <%= "#{appointment.client.first_name} #{appointment.client.last_name}" %>
-    <div class="text-xs text-gray-600">
-      <%= appointment.start_time.strftime('%l:%M') %> - <%= (appointment.start_time + (appointment.appointment_type ? appointment.appointment_type.duration : 0).minutes).strftime('%l:%M') %>
+<turbo-frame id="appointment_<%= appointment.id %>">
+  <div data-action="click->appointment-modal#showAppointment" data-appointment-id="<%= appointment.id %>" data-controller="appointment-drag">
+    <div>
+      <%= "#{appointment.client.first_name} #{appointment.client.last_name}" %>
+      <div class="text-xs text-gray-600">
+        <%= appointment.start_time.strftime('%l:%M') %> - <%= (appointment.start_time + (appointment.appointment_type ? appointment.appointment_type.duration : 0).minutes).strftime('%l:%M') %>
+      </div>
     </div>
   </div>
-</div>
+</turbo-frame>
