@@ -40,9 +40,18 @@ class AppointmentsController < ApplicationController
   def update
     @appointment = Appointment.find(params[:id])
     if @appointment.update(appointment_params)
-      redirect_to appointments_path, notice: 'Appointment was successfully updated.'
+      render json: {
+        status: 'success', 
+        message: 'Appointment was successfully updated.', 
+        appointment_html: view_context.turbo_frame_tag("appointment_#{@appointment.id}") do 
+          render_to_string(partial: 'appointments/appointment', locals: { appointment: @appointment })
+        end
+      }
     else
-      render :edit
+      render json: {
+        status: 'error',
+        message: @appointment.errors.full_messages
+      }, status: :unprocessable_entity
     end
   end
 

@@ -1,4 +1,4 @@
-<div data-action="click->appointment-modal#showAppointment" data-appointment-id="<%= appointment.id %>">
+<div data-action="click->appointment-modal#showAppointment" data-appointment-id="<%= appointment.id %>" data-controller="appointment-drag">
   <div>
     <%= "#{appointment.client.first_name} #{appointment.client.last_name}" %>
     <div class="text-xs text-gray-600">
