@@ -1,5 +1,5 @@
 class AppointmentsController < ApplicationController
-  before_action :set_appointment_types_and_time_options, only: [:index, :new]
+  before_action :set_appointment_types_and_time_options, only: [:index, :new, :edit]
 
   def index
     @appointments = Appointment.all
@@ -98,7 +98,7 @@ class AppointmentsController < ApplicationController
     end
   
     if permitted_params[:appointment_type].present?
-      appointment_type = AppointmentType.find(permitted_params[:appointment_type])
+      appointment_type = AppointmentType.find_by(id: permitted_params[:appointment_type])
       permitted_params[:appointment_type] = appointment_type
     end
   
